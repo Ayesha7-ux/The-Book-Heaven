@@ -1,0 +1,118 @@
+.container {
+  padding: 4rem 0;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.title {
+  font-size: 3rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--muted-foreground);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.pricingWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--accent);
+  padding: 3rem;
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 20px 50px rgba(212, 163, 115, 0.15);
+  text-align: center;
+}
+
+.cardHeader {
+  margin-bottom: 2rem;
+}
+
+.planName {
+  font-family: var(--serif-font);
+  font-size: 2rem;
+  margin: 1rem 0;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.currency {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.amount {
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.period {
+  color: var(--muted-foreground);
+  font-weight: 600;
+}
+
+.features {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.features li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1rem;
+}
+
+.upgradeBtn {
+  width: 100%;
+  padding: 1.25rem;
+  background: var(--accent);
+  color: white;
+  border-radius: var(--radius);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  transition: transform 0.2s;
+}
+
+.upgradeBtn:hover:not(:disabled) {
+  transform: scale(1.02);
+}
+
+.upgradeBtn:disabled {
+  background: var(--muted);
+  color: var(--muted-foreground);
+  cursor: not-allowed;
+}
+
+.secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+}

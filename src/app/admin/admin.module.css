@@ -1,0 +1,152 @@
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.statCard {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted-foreground);
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.addBtn {
+  margin-top: auto;
+  padding: 0.75rem;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: var(--radius);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.tableWrapper {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  padding: 1rem;
+  background: var(--muted);
+  border-bottom: 1px solid var(--card-border);
+  font-size: 0.85rem;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.bookInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.smallCover {
+  width: 40px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.bookTitle {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.bookAuthor {
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+}
+
+.typeFree {
+  background: #dcfce7;
+  color: #166534;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.typePremium {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.bookStats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: var(--muted-foreground);
+}
+
+.bookStats span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editBtn, .deleteBtn {
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.editBtn {
+  color: var(--primary);
+}
+
+.editBtn:hover {
+  background: var(--muted);
+}
+
+.deleteBtn {
+  color: #dc2626;
+}
+
+.deleteBtn:hover {
+  background: #fee2e2;
+}

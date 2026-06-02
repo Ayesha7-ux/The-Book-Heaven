@@ -1,0 +1,155 @@
+.container {
+  padding: 4rem 0;
+}
+
+.bookLayout {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 4rem;
+}
+
+.coverWrapper {
+  position: sticky;
+  top: 6rem;
+}
+
+.cover {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+}
+
+.author {
+  font-size: 1.5rem;
+  color: var(--muted-foreground);
+  margin-bottom: 2rem;
+}
+
+.meta {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metaLabel {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  font-weight: 700;
+}
+
+.metaValue {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.description {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--foreground);
+  margin-bottom: 3rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.readBtn {
+  padding: 1rem 3rem;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: var(--radius);
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: opacity 0.2s;
+}
+
+.readBtn:hover {
+  opacity: 0.9;
+}
+
+.saveBtn {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.saveBtn:hover {
+  background: var(--muted);
+}
+
+.premiumLock {
+  background: var(--muted);
+  padding: 2rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--accent);
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.lockTitle {
+  font-family: var(--serif-font);
+  font-size: 1.5rem;
+  color: var(--accent);
+}
+
+.lockDesc {
+  font-size: 0.95rem;
+  color: var(--muted-foreground);
+}
+
+.upgradeBtn {
+  padding: 0.75rem 2rem;
+  background: var(--accent);
+  color: white;
+  border-radius: var(--radius);
+  font-weight: 700;
+}
+
+@media (max-width: 1024px) {
+  .bookLayout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .coverWrapper {
+    max-width: 300px;
+    margin: 0 auto;
+    position: static;
+  }
+  
+  .title {
+    font-size: 2.2rem;
+  }
+}

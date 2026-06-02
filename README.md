@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# The Book Heaven
 
-## Getting Started
+The Book Heaven is a premium, full-stack eLibrary platform designed for a superior reading experience. It features a modern aesthetic, robust authentication, role-based access control, and an integrated PDF reader.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Modern UI/UX:** Clean, professional "digital library" theme with soft colors and elegant typography.
+- **Dark/Light Mode:** Persistent theme toggling for reading comfort.
+- **Full-Stack Auth:** Secure JWT-based authentication with Guest, User, and Admin roles.
+- **Book Catalog:** Browse by category, search by title/author, and filter by free/premium status.
+- **Integrated PDF Reader:** High-quality reading experience directly in the browser using `react-pdf`.
+- **Admin Panel:** Secure dashboard for library management, including book uploads (via Cloudinary) and analytics.
+- **Premium System:** Simulated payment flow to unlock exclusive content.
+
+## 🛠 Tech Stack
+
+- **Frontend/Backend:** Next.js 15+ (App Router)
+- **Database:** MongoDB (Mongoose)
+- **Authentication:** Custom JWT with HttpOnly Cookies
+- **Styling:** CSS Modules
+- **Asset Storage:** Cloudinary (Signed Uploads)
+- **Icons:** Lucide React
+
+## 📦 Getting Started
+
+### 1. Prerequisites
+- Node.js (v18+)
+- MongoDB Atlas account
+- Cloudinary account
+
+### 2. Environment Variables
+Create a `.env.local` file in the root directory and add the following:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=your_upload_preset
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Installation
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Running the App
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛡 Security Note
+This application uses signed uploads for Cloudinary and HttpOnly cookies for JWT to follow production-grade security standards.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📄 License
+MIT
