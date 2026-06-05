@@ -15,6 +15,14 @@
       "password": "user123",
       "role": "user",
       "isPremium": false
+    },
+    {
+      "id": "u3",
+      "name": "ayesha",
+      "email": "ayesha@example.com",
+      "password": "password123",
+      "role": "user",
+      "isPremium": true
     }
   ]
 }
