@@ -47,13 +47,13 @@ export default function Navbar() {
                 <div className={styles.dropdown}>
                   {user.role === 'admin' && (
                     <Link href="/admin" className={styles.dropdownItem}>
-                      <Shield size={16} inline style={{ marginRight: '8px' }} />
+                      <Shield size={16} style={{ marginRight: '8px' }} />
                       Admin Panel
                     </Link>
                   )}
                   <Link href="/profile" className={styles.dropdownItem}>My Profile</Link>
                   <button onClick={handleLogout} className={`${styles.dropdownItem} ${styles.logoutBtn}`}>
-                    <LogOut size={16} inline style={{ marginRight: '8px' }} />
+                    <LogOut size={16} style={{ marginRight: '8px' }} />
                     Logout
                   </button>
                 </div>

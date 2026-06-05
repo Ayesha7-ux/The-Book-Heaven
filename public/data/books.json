@@ -1,0 +1,64 @@
+{
+  "books": [
+    {
+      "_id": "1",
+      "title": "The Little Prince",
+      "author": "Antoine de Saint-Exupéry",
+      "category": "Literature",
+      "coverImage": "https://via.placeholder.com/300x400?text=The+Little+Prince",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "isPremium": false,
+      "views": 1200,
+      "averageRating": 4.5,
+      "description": "A poetic tale of a pilot stranded in the desert who meets a young prince from another planet."
+    },
+    {
+      "_id": "2",
+      "title": "Clean Code",
+      "author": "Robert C. Martin",
+      "category": "Education",
+      "coverImage": "https://via.placeholder.com/300x400?text=Clean+Code",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "isPremium": true,
+      "views": 900,
+      "averageRating": 4.7,
+      "description": "A handbook of agile software craftsmanship focusing on writing readable, maintainable code."
+    },
+    {
+      "_id": "3",
+      "title": "Atomic Habits",
+      "author": "James Clear",
+      "category": "Self-help",
+      "coverImage": "https://via.placeholder.com/300x400?text=Atomic+Habits",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "isPremium": false,
+      "views": 2300,
+      "averageRating": 4.6,
+      "description": "Tiny changes lead to remarkable results — practical strategies for forming good habits."
+    },
+    {
+      "_id": "4",
+      "title": "Introduction to Algorithms",
+      "author": "Cormen, Leiserson, Rivest, Stein",
+      "category": "Academic",
+      "coverImage": "https://via.placeholder.com/300x400?text=Algorithms",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "isPremium": true,
+      "views": 450,
+      "averageRating": 4.3,
+      "description": "Comprehensive introduction to modern algorithm design and analysis."
+    },
+    {
+      "_id": "5",
+      "title": "Sapiens",
+      "author": "Yuval Noah Harari",
+      "category": "History",
+      "coverImage": "https://via.placeholder.com/300x400?text=Sapiens",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "isPremium": false,
+      "views": 1800,
+      "averageRating": 4.4,
+      "description": "A brief history of humankind, exploring how Homo sapiens came to dominate the planet."
+    }
+  ]
+}

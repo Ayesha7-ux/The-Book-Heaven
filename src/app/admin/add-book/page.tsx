@@ -1,8 +1,7 @@
-'use client';
+ 'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import { Upload, X, Loader2, CheckCircle } from 'lucide-react';
 import styles from '../admin.module.css';
 
@@ -24,22 +23,9 @@ export default function AddBookPage() {
   
   const router = useRouter();
 
-  const handleUpload = async (file: File, folder: string) => {
-    const { data: sigData } = await axios.post('/api/admin/cloudinary-sig', { folder });
-    
-    const uploadData = new FormData();
-    uploadData.append('file', file);
-    uploadData.append('api_key', sigData.apiKey);
-    uploadData.append('timestamp', sigData.timestamp);
-    uploadData.append('signature', sigData.signature);
-    uploadData.append('folder', folder);
-
-    const { data: cloudinaryRes } = await axios.post(
-      `https://api.cloudinary.com/v1_1/${sigData.cloudName}/auto/upload`,
-      uploadData
-    );
-
-    return cloudinaryRes.secure_url;
+  const handleUpload = async (file: File) => {
+    // For static demo, use object URLs to simulate uploaded assets
+    return URL.createObjectURL(file);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -53,19 +39,32 @@ export default function AddBookPage() {
     setStatus('Uploading assets to Cloudinary...');
 
     try {
-      const coverUrl = await handleUpload(coverFile, 'book-covers');
-      setStatus('Cover uploaded. Uploading PDF...');
-      const pdfUrl = await handleUpload(pdfFile, 'book-pdfs');
+      const coverUrl = await handleUpload(coverFile);
+      setStatus('Cover uploaded. Preparing PDF...');
+      const pdfUrl = await handleUpload(pdfFile);
 
       setStatus('Finalizing book entry...');
-      await axios.post('/api/books', {
-        ...formData,
+      const newBook = {
+        _id: 'b' + Date.now(),
+        title: formData.title,
+        author: formData.author,
+        description: formData.description,
+        category: formData.category,
+        isPremium: formData.isPremium,
         coverImage: coverUrl,
-        pdfUrl: pdfUrl,
-      });
+        pdfUrl,
+        views: 0,
+        averageRating: 0,
+      };
+
+      // persist to localStorage mock_books
+      const raw = localStorage.getItem('mock_books');
+      const arr = raw ? JSON.parse(raw) : [];
+      arr.unshift(newBook);
+      localStorage.setItem('mock_books', JSON.stringify(arr));
 
       setStatus('Book added successfully!');
-      setTimeout(() => router.push('/admin'), 1500);
+      setTimeout(() => router.push('/admin'), 800);
     } catch (error: any) {
       console.error(error);
       alert('Failed to add book: ' + (error.response?.data?.message || error.message));

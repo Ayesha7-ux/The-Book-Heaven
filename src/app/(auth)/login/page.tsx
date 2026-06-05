@@ -1,9 +1,8 @@
-'use client';
+ 'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
 import styles from '../auth.module.css';
 
@@ -22,12 +21,12 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const { data } = await axios.post('/api/auth/login', { email, password });
-      login(data.user);
+      const usr = await login(email, password);
+      // login function stores user in localStorage
       router.push('/');
       router.refresh();
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Something went wrong');
+      setError(err.message || 'Something went wrong');
     } finally {
       setLoading(false);
     }

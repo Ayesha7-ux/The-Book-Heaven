@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, X } from 'lucide-react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 // Set up worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
@@ -42,7 +40,7 @@ export default function Reader({ pdfUrl, title, onClose }: ReaderProps) {
         background: '#1a1a1a',
         color: 'white',
         display: 'flex',
-        justify-content: space-between,
+        justifyContent: 'space-between',
         alignItems: 'center',
         borderBottom: '1px solid #333',
       }}>

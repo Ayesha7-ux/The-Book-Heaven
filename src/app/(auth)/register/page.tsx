@@ -1,10 +1,10 @@
-'use client';
+ 'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import styles from '../auth.module.css';
+import { useAuth } from '@/context/AuthContext';
 
 export default function RegisterPage() {
   const [name, setName] = useState('');
@@ -14,6 +14,7 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   
   const router = useRouter();
+  const { register } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,10 +22,10 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      await axios.post('/api/auth/register', { name, email, password });
+      await register(name, email, password);
       router.push('/login?registered=true');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Something went wrong');
+      setError(err.message || 'Something went wrong');
     } finally {
       setLoading(false);
     }

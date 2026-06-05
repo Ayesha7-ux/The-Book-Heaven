@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import axios from 'axios';
 import { Plus, Book as BookIcon, Eye, Star, Trash2, Edit } from 'lucide-react';
 import styles from './admin.module.css';
 
 export default function AdminPage() {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState<any[]>([]);
   const [stats, setStats] = useState({
     total: 0,
     free: 0,
@@ -19,15 +18,20 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get('/api/books');
-        setBooks(data.books);
+        const res = await fetch('/data/books.json');
+        const json = await res.json();
+        const seedBooks = json.books || [];
+        const localRaw = localStorage.getItem('mock_books');
+        const localBooks = localRaw ? JSON.parse(localRaw) : [];
+        const merged = [...localBooks, ...seedBooks];
+        setBooks(merged);
         
-        const freeCount = data.books.filter((b: any) => !b.isPremium).length;
-        const premiumCount = data.books.filter((b: any) => b.isPremium).length;
-        const viewsCount = data.books.reduce((acc: number, b: any) => acc + (b.views || 0), 0);
-        
+        const freeCount = json.books.filter((b: any) => !b.isPremium).length;
+        const premiumCount = json.books.filter((b: any) => b.isPremium).length;
+        const viewsCount = json.books.reduce((acc: number, b: any) => acc + (b.views || 0), 0);
+
         setStats({
-          total: data.books.length,
+          total: json.books.length,
           free: freeCount,
           premium: premiumCount,
           totalViews: viewsCount
@@ -42,14 +46,17 @@ export default function AdminPage() {
     fetchData();
   }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = (id: string) => {
     if (window.confirm('Are you sure you want to delete this book?')) {
-      try {
-        await axios.delete(`/api/books/${id}`);
-        setBooks(books.filter((b: any) => b._id !== id));
-      } catch (error) {
-        alert('Failed to delete book');
-      }
+      const updated = books.filter((b: any) => b._id !== id);
+      setBooks(updated);
+      // persist deletions locally for demo
+      const seedRes = fetch('/data/books.json').then(r => r.json()).then(j => j.books || []);
+      Promise.resolve(seedRes).then((seedBooks: any[]) => {
+        // keep only local-created books in mock_books
+        const remainingLocal = updated.filter(b => !seedBooks.find(sb => sb._id === b._id));
+        localStorage.setItem('mock_books', JSON.stringify(remainingLocal));
+      });
     }
   };
 

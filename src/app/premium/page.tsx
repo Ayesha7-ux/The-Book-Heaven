@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import { Check, Shield, Star, Zap, Loader2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import styles from './premium.module.css';
@@ -22,11 +21,9 @@ export default function PremiumPage() {
     try {
       // Simulate payment processing
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Call API to upgrade user
-      await axios.put('/api/user/upgrade');
-      
-      await checkAuth();
+      // For static demo, toggle local premium flag
+      localStorage.setItem('mock_is_premium', 'true');
+      if (checkAuth) checkAuth();
       router.push('/premium/success');
     } catch (error) {
       alert('Upgrade failed. Please try again.');

@@ -1,38 +1,28 @@
-'use client';
-
-import { useEffect, useState, use } from 'react';
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import { BookOpen, Bookmark, Star, Lock, ShieldCheck } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
 import styles from './book.module.css';
+import path from 'path';
+import fs from 'fs';
 
-export default function BookDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
-  const [book, setBook] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
-  const router = useRouter();
+export const dynamicParams = false;
 
-  useEffect(() => {
-    const fetchBook = async () => {
-      try {
-        const { data } = await axios.get(`/api/books/${id}`);
-        setBook(data.book);
-      } catch (error) {
-        console.error('Error fetching book', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+export async function generateStaticParams() {
+  const filePath = path.join(process.cwd(), 'public', 'data', 'books.json');
+  const raw = fs.readFileSync(filePath, 'utf8');
+  const data = JSON.parse(raw);
+  const books = data?.books || [];
+  return books.map((b: any) => ({ id: String(b._id) }));
+}
 
-    fetchBook();
-  }, [id]);
+export default function BookDetailPage({ params }: { params: { id: string } }) {
+  const { id } = params;
+  const filePath = path.join(process.cwd(), 'public', 'data', 'books.json');
+  const raw = fs.readFileSync(filePath, 'utf8');
+  const data = JSON.parse(raw);
+  const book = (data.books || []).find((b: any) => String(b._id) === String(id));
 
-  if (loading) return <div className="container">Loading book details...</div>;
   if (!book) return <div className="container">Book not found.</div>;
 
-  const canRead = !book.isPremium || (user && user.isPremium) || (user && user.role === 'admin');
+  const canRead = !book.isPremium;
 
   return (
     <div className={`container ${styles.container}`}>
@@ -53,7 +43,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
             <div className={styles.metaItem}>
               <span className={styles.metaLabel}>Rating</span>
               <span className={styles.metaValue}>
-                <Star size={16} inline fill="currentColor" style={{ color: '#f59e0b', marginRight: '4px' }} />
+                <Star size={16} fill="currentColor" style={{ color: '#f59e0b', marginRight: '4px' }} />
                 {book.averageRating?.toFixed(1) || '0.0'}
               </span>
             </div>
@@ -81,13 +71,10 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
 
           {canRead ? (
             <div className={styles.actions}>
-              <button 
-                onClick={() => router.push(`/book/${id}/read`)}
-                className={styles.readBtn}
-              >
+              <a href={`/book/${id}/read`} className={styles.readBtn}>
                 <BookOpen size={20} />
                 Read Now
-              </button>
+              </a>
               <button className={styles.saveBtn} aria-label="Save Book">
                 <Bookmark size={20} />
               </button>
@@ -99,26 +86,20 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
               <p className={styles.lockDesc}>
                 This book is exclusive to our premium members. Upgrade your account to gain instant access to our entire premium library.
               </p>
-              <button 
-                onClick={() => router.push('/premium')}
-                className={styles.upgradeBtn}
-              >
+              <a href="/premium" className={styles.upgradeBtn}>
                 Go Premium
-              </button>
+              </a>
             </div>
           )}
 
-          {user && user.role === 'admin' && (
+          {book.adminNote && (
             <div style={{ marginTop: '2rem', padding: '1rem', border: '1px dashed var(--accent)', borderRadius: 'var(--radius)' }}>
               <p style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <ShieldCheck size={18} /> Admin Access Granted
+                <ShieldCheck size={18} /> Admin Note
               </p>
-              <button 
-                onClick={() => router.push(`/admin/edit/${id}`)}
-                style={{ marginTop: '0.5rem', color: 'var(--accent)', fontWeight: '600' }}
-              >
-                Edit Book
-              </button>
+              <div style={{ marginTop: '0.5rem', color: 'var(--accent)', fontWeight: '600' }}>
+                {book.adminNote}
+              </div>
             </div>
           )}
         </div>

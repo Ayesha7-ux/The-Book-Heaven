@@ -1,29 +1,26 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Search } from 'lucide-react';
 import BookCard from '@/components/BookCard';
 import styles from './page.module.css';
 
 export default function Home() {
-  const [featuredBooks, setFeaturedBooks] = useState([]);
-  const [freeBooks, setFreeBooks] = useState([]);
-  const [premiumBooks, setPremiumBooks] = useState([]);
+  const [featuredBooks, setFeaturedBooks] = useState<any[]>([]);
+  const [freeBooks, setFreeBooks] = useState<any[]>([]);
+  const [premiumBooks, setPremiumBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const [featuredRes, freeRes, premiumRes] = await Promise.all([
-          axios.get('/api/books?limit=4'),
-          axios.get('/api/books?type=free&limit=4'),
-          axios.get('/api/books?type=premium&limit=4'),
-        ]);
+        const res = await fetch('/data/books.json');
+        const data = await res.json();
+        const all = data.books || [];
 
-        setFeaturedBooks(featuredRes.data.books);
-        setFreeBooks(freeRes.data.books);
-        setPremiumBooks(premiumRes.data.books);
+        setFeaturedBooks(all.slice(0, 4));
+        setFreeBooks(all.filter((b: any) => !b.isPremium).slice(0, 4));
+        setPremiumBooks(all.filter((b: any) => b.isPremium).slice(0, 4));
       } catch (error) {
         console.error('Error fetching books', error);
       } finally {
