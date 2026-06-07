@@ -14,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const res = await fetch('/data/books.json');
+        const res = await fetch('/api/books');
         const data = await res.json();
         const all = data.books || [];
 

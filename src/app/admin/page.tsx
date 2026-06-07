@@ -1,139 +1,155 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { 
+  BookOpen, 
+  Users, 
+  ShoppingCart, 
+  DollarSign,
+  TrendingUp,
+  ArrowRight
+} from 'lucide-react';
 import Link from 'next/link';
-import { Plus, Book as BookIcon, Eye, Star, Trash2, Edit } from 'lucide-react';
-import styles from './admin.module.css';
 
-export default function AdminPage() {
-  const [books, setBooks] = useState<any[]>([]);
-  const [stats, setStats] = useState({
-    total: 0,
-    free: 0,
-    premium: 0,
-    totalViews: 0
-  });
+export default function AdminDashboard() {
+  const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    async function fetchStats() {
       try {
-        const res = await fetch('/data/books.json');
-        const json = await res.json();
-        const seedBooks = json.books || [];
-        const localRaw = localStorage.getItem('mock_books');
-        const localBooks = localRaw ? JSON.parse(localRaw) : [];
-        const merged = [...localBooks, ...seedBooks];
-        setBooks(merged);
-        
-        const freeCount = json.books.filter((b: any) => !b.isPremium).length;
-        const premiumCount = json.books.filter((b: any) => b.isPremium).length;
-        const viewsCount = json.books.reduce((acc: number, b: any) => acc + (b.views || 0), 0);
-
-        setStats({
-          total: json.books.length,
-          free: freeCount,
-          premium: premiumCount,
-          totalViews: viewsCount
-        });
+        const res = await fetch('/api/admin/stats');
+        const data = await res.json();
+        setStats(data);
       } catch (error) {
-        console.error('Error fetching admin data', error);
+        console.error('Error fetching stats:', error);
       } finally {
         setLoading(false);
       }
-    };
-
-    fetchData();
-  }, []);
-
-  const handleDelete = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this book?')) {
-      const updated = books.filter((b: any) => b._id !== id);
-      setBooks(updated);
-      // persist deletions locally for demo
-      const seedRes = fetch('/data/books.json').then(r => r.json()).then(j => j.books || []);
-      Promise.resolve(seedRes).then((seedBooks: any[]) => {
-        // keep only local-created books in mock_books
-        const remainingLocal = updated.filter(b => !seedBooks.find(sb => sb._id === b._id));
-        localStorage.setItem('mock_books', JSON.stringify(remainingLocal));
-      });
     }
-  };
+    fetchStats();
+  }, []);
 
   if (loading) return <div>Loading dashboard...</div>;
 
+  const cards = [
+    { label: 'Total Books', value: stats.totalBooks, icon: BookOpen, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { label: 'Total Users', value: stats.totalUsers, icon: Users, color: 'text-green-600', bg: 'bg-green-50' },
+    { label: 'Total Orders', value: stats.totalOrders, icon: ShoppingCart, color: 'text-purple-600', bg: 'bg-purple-50' },
+    { label: 'Revenue', value: `$${stats.revenue.toFixed(2)}`, icon: DollarSign, color: 'text-amber-600', bg: 'bg-amber-50' },
+  ];
+
   return (
-    <div>
-      <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
-          <span className={styles.statLabel}>Total Books</span>
-          <span className={styles.statValue}>{stats.total}</span>
-        </div>
-        <div className={styles.statCard}>
-          <span className={styles.statLabel}>Free vs Premium</span>
-          <span className={styles.statValue}>{stats.free} / {stats.premium}</span>
-        </div>
-        <div className={styles.statCard}>
-          <span className={styles.statLabel}>Total Views</span>
-          <span className={styles.statValue}>{stats.totalViews}</span>
-        </div>
-        <div className={styles.statCard}>
-          <span className={styles.statLabel}>Quick Actions</span>
-          <Link href="/admin/add-book" className={styles.addBtn}>
-            <Plus size={18} /> Add New Book
-          </Link>
-        </div>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-serif font-bold mb-2">Dashboard Overview</h1>
+        <p className="text-muted-foreground">Monitor your store's performance and activity.</p>
       </div>
 
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Book</th>
-              <th>Category</th>
-              <th>Type</th>
-              <th>Stats</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {books.map((book: any) => (
-              <tr key={book._id}>
-                <td>
-                  <div className={styles.bookInfo}>
-                    <img src={book.coverImage} alt="" className={styles.smallCover} />
-                    <div>
-                      <div className={styles.bookTitle}>{book.title}</div>
-                      <div className={styles.bookAuthor}>{book.author}</div>
-                    </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {cards.map((card) => (
+          <div key={card.label} className="bg-card-bg p-6 rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between mb-4">
+              <div className={`p-3 rounded-lg ${card.bg} ${card.color}`}>
+                <card.icon size={24} />
+              </div>
+              <TrendingUp size={20} className="text-green-500" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground mb-1">{card.label}</p>
+              <p className="text-2xl font-bold">{card.value}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-card-bg p-6 rounded-xl border border-border shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold font-serif">Monthly Sales (Mock)</h2>
+            <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+              <span className="flex items-center gap-1"><div className="w-3 h-3 bg-accent rounded-sm"></div> Revenue</span>
+            </div>
+          </div>
+          <div className="h-64 flex items-end justify-between gap-2 px-2">
+            {[40, 70, 45, 90, 65, 80, 50, 85, 60, 95, 75, 100].map((height, i) => (
+              <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
+                <div 
+                  className="w-full bg-accent/20 hover:bg-accent rounded-t-sm transition-all duration-300 relative"
+                  style={{ height: `${height}%` }}
+                >
+                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    ${(height * 12.5).toFixed(0)}
                   </div>
-                </td>
-                <td>{book.category}</td>
-                <td>
-                  <span className={book.isPremium ? styles.typePremium : styles.typeFree}>
-                    {book.isPremium ? 'Premium' : 'Free'}
-                  </span>
-                </td>
-                <td>
-                  <div className={styles.bookStats}>
-                    <span title="Views"><Eye size={14} /> {book.views}</span>
-                    <span title="Rating"><Star size={14} /> {book.averageRating?.toFixed(1) || '0.0'}</span>
-                  </div>
-                </td>
-                <td>
-                  <div className={styles.actions}>
-                    <Link href={`/admin/edit/${book._id}`} className={styles.editBtn} aria-label="Edit">
-                      <Edit size={18} />
-                    </Link>
-                    <button onClick={() => handleDelete(book._id)} className={styles.deleteBtn} aria-label="Delete">
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
+                </div>
+                <span className="text-[10px] text-muted-foreground uppercase">
+                  {['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'][i]}
+                </span>
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
+
+        <div className="bg-card-bg p-6 rounded-xl border border-border shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold font-serif">Quick Actions</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Link href="/admin/books" className="p-4 border border-border rounded-lg hover:bg-muted transition-colors flex flex-col gap-2">
+              <BookOpen className="text-accent" />
+              <span className="font-medium">Manage Books</span>
+            </Link>
+            <Link href="/admin/users" className="p-4 border border-border rounded-lg hover:bg-muted transition-colors flex flex-col gap-2">
+              <Users className="text-accent" />
+              <span className="font-medium">Manage Users</span>
+            </Link>
+            <Link href="/admin/orders" className="p-4 border border-border rounded-lg hover:bg-muted transition-colors flex flex-col gap-2">
+              <ShoppingCart className="text-accent" />
+              <span className="font-medium">Recent Orders</span>
+            </Link>
+            <Link href="/admin/add-book" className="p-4 border border-border rounded-lg hover:bg-muted transition-colors flex flex-col gap-2">
+              <DollarSign className="text-accent" />
+              <span className="font-medium">Add New Book</span>
+            </Link>
+          </div>
+        </div>
+
+        <div className="bg-card-bg p-6 rounded-xl border border-border shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold font-serif">Library Breakdown</h2>
+          </div>
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span>Free Books</span>
+                <span className="font-medium">{stats.freeBooks}</span>
+              </div>
+              <div className="w-full bg-muted h-2 rounded-full overflow-hidden">
+                <div 
+                  className="bg-green-500 h-full" 
+                  style={{ width: `${(stats.freeBooks / stats.totalBooks) * 100}%` }}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span>Premium Books</span>
+                <span className="font-medium">{stats.premiumBooks}</span>
+              </div>
+              <div className="w-full bg-muted h-2 rounded-full overflow-hidden">
+                <div 
+                  className="bg-amber-500 h-full" 
+                  style={{ width: `${(stats.premiumBooks / stats.totalBooks) * 100}%` }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="mt-8">
+             <Link href="/admin/books" className="text-accent font-medium hover:underline flex items-center gap-2">
+                View Full Library <ArrowRight size={16} />
+             </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -3,15 +3,7 @@ import styles from './book.module.css';
 import path from 'path';
 import fs from 'fs';
 
-export const dynamicParams = false;
-
-export async function generateStaticParams() {
-  const filePath = path.join(process.cwd(), 'public', 'data', 'books.json');
-  const raw = fs.readFileSync(filePath, 'utf8');
-  const data = JSON.parse(raw);
-  const books = data?.books || [];
-  return books.map((b: any) => ({ id: String(b._id) }));
-}
+export const dynamic = 'force-dynamic';
 
 export default function BookDetailPage({ params }: { params: { id: string } }) {
   const { id } = params;

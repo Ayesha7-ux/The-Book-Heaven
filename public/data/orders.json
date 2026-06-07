@@ -1,0 +1,31 @@
+{
+  "orders": [
+    {
+      "id": "ord1",
+      "user": "Jane Smith",
+      "email": "jane@example.com",
+      "items": ["The Great Gatsby"],
+      "total": 15.99,
+      "status": "Delivered",
+      "date": "2026-06-01"
+    },
+    {
+      "id": "ord2",
+      "user": "Bob Wilson",
+      "email": "bob@example.com",
+      "items": ["To Kill a Mockingbird"],
+      "total": 12.50,
+      "status": "Shipped",
+      "date": "2026-06-05"
+    },
+    {
+      "id": "ord3",
+      "user": "Alice Johnson",
+      "email": "alice@example.com",
+      "items": ["1984"],
+      "total": 9.99,
+      "status": "Pending",
+      "date": "2026-06-06"
+    }
+  ]
+}

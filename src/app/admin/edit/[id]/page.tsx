@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import { ArrowLeft, Save, Image as ImageIcon, Book as BookIcon } from 'lucide-react';
 import Link from 'next/link';
 
-export default function AddBookPage() {
+export default function EditBookPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { id } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     author: '',
@@ -20,26 +22,53 @@ export default function AddBookPage() {
     pdfUrl: ''
   });
 
+  useEffect(() => {
+    async function fetchBook() {
+      try {
+        const res = await fetch('/api/books');
+        const data = await res.json();
+        const book = data.books.find((b: any) => b._id === id);
+        if (book) {
+          setFormData(book);
+        } else {
+          router.push('/admin/books');
+        }
+      } catch (error) {
+        console.error('Error fetching book:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchBook();
+  }, [id, router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setSaving(true);
+    // Note: This project's saveBook in lib/books.ts unshifts the book, 
+    // we might need an update function or just reuse saveBook if it handles ID correctly.
+    // Actually, looking at src/app/api/books/route.ts, it always adds a new book.
+    // I should check if there's an update API.
+    // Let's check src/app/api/books/[id]/route.ts.
     try {
-      const res = await fetch('/api/books', {
-        method: 'POST',
+      const res = await fetch(`/api/books/${id}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
       if (res.ok) {
         router.push('/admin/books');
       } else {
-        alert('Failed to add book');
+        alert('Failed to update book');
       }
     } catch (error) {
-      console.error('Error adding book:', error);
+      console.error('Error updating book:', error);
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
+
+  if (loading) return <div>Loading book details...</div>;
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -48,8 +77,8 @@ export default function AddBookPage() {
           <ArrowLeft size={24} />
         </Link>
         <div>
-          <h1 className="text-3xl font-serif font-bold">Add New Book</h1>
-          <p className="text-muted-foreground">Fill in the details to expand your library.</p>
+          <h1 className="text-3xl font-serif font-bold">Edit Book</h1>
+          <p className="text-muted-foreground">Modify the details of "{formData.title}".</p>
         </div>
       </div>
 
@@ -62,7 +91,6 @@ export default function AddBookPage() {
                 required
                 type="text" 
                 className="w-full px-4 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-accent/50 outline-none"
-                placeholder="e.g. The Great Gatsby"
                 value={formData.title}
                 onChange={e => setFormData({ ...formData, title: e.target.value })}
               />
@@ -73,7 +101,6 @@ export default function AddBookPage() {
                 required
                 type="text" 
                 className="w-full px-4 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-accent/50 outline-none"
-                placeholder="e.g. F. Scott Fitzgerald"
                 value={formData.author}
                 onChange={e => setFormData({ ...formData, author: e.target.value })}
               />
@@ -86,7 +113,6 @@ export default function AddBookPage() {
                 value={formData.category}
                 onChange={e => setFormData({ ...formData, category: e.target.value })}
               >
-                <option value="">Select a category</option>
                 <option value="Fiction">Fiction</option>
                 <option value="Non-Fiction">Non-Fiction</option>
                 <option value="Mystery">Mystery</option>
@@ -121,7 +147,6 @@ export default function AddBookPage() {
             <textarea 
               rows={4}
               className="w-full px-4 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-accent/50 outline-none resize-none"
-              placeholder="Brief summary of the book..."
               value={formData.description}
               onChange={e => setFormData({ ...formData, description: e.target.value })}
             />
@@ -135,7 +160,6 @@ export default function AddBookPage() {
                 <input 
                   type="url" 
                   className="w-full pl-10 pr-4 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-accent/50 outline-none"
-                  placeholder="https://..."
                   value={formData.coverImage}
                   onChange={e => setFormData({ ...formData, coverImage: e.target.value })}
                 />
@@ -148,7 +172,6 @@ export default function AddBookPage() {
                 <input 
                   type="url" 
                   className="w-full pl-10 pr-4 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-accent/50 outline-none"
-                  placeholder="https://..."
                   value={formData.pdfUrl}
                   onChange={e => setFormData({ ...formData, pdfUrl: e.target.value })}
                 />
@@ -179,10 +202,10 @@ export default function AddBookPage() {
           </Link>
           <button 
             type="submit"
-            disabled={loading}
+            disabled={saving}
             className="bg-accent text-white px-8 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center gap-2 disabled:opacity-50"
           >
-            {loading ? 'Saving...' : <><Save size={20} /> Save Book</>}
+            {saving ? 'Saving...' : <><Save size={20} /> Update Book</>}
           </button>
         </div>
       </form>

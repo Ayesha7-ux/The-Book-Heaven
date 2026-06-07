@@ -59,6 +59,42 @@
       "views": 1800,
       "averageRating": 4.4,
       "description": "A brief history of humankind, exploring how Homo sapiens came to dominate the planet."
+    },
+    {
+      "_id": "6",
+      "title": "Thinking, Fast and Slow",
+      "author": "Daniel Kahneman",
+      "category": "Science",
+      "coverImage": "https://via.placeholder.com/300x400?text=Thinking",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "isPremium": true,
+      "views": 3200,
+      "averageRating": 4.8,
+      "description": "Explores the two systems that drive the way we think — one fast, intuitive, and emotional; the other slower, more deliberative, and logical."
+    },
+    {
+      "_id": "7",
+      "title": "The Alchemist",
+      "author": "Paulo Coelho",
+      "category": "Fiction",
+      "coverImage": "https://via.placeholder.com/300x400?text=Alchemist",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "isPremium": false,
+      "views": 5000,
+      "averageRating": 4.9,
+      "description": "A magical story about following your dreams and listening to your heart."
+    },
+    {
+      "_id": "8",
+      "title": "Deep Work",
+      "author": "Cal Newport",
+      "category": "Self-help",
+      "coverImage": "https://via.placeholder.com/300x400?text=Deep+Work",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "isPremium": true,
+      "views": 1500,
+      "averageRating": 4.6,
+      "description": "Rules for focused success in a distracted world."
     }
   ]
 }
